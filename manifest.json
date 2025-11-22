@@ -1,0 +1,22 @@
+
+{
+  "short_name": "Chytrá docházka",
+  "name": "Chytrá docházka - Měsíční Výkazy",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/9512/9512839.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/9512/9512839.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0f172a",
+  "background_color": "#f3f4f6",
+  "orientation": "portrait-primary"
+}
