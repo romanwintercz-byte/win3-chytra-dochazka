@@ -2,6 +2,14 @@ import { GoogleGenAI, Type, Schema } from "@google/genai";
 import { WorkType, TimeEntry, CalendarEvent, Job } from "../types";
 
 const apiKey = process.env.API_KEY || '';
+
+// Debugging helper pro produkci (klíč se v logu neukáže celý, jen zda existuje)
+if (!apiKey) {
+  console.error("⚠️ CRITICAL: Gemini API Key is missing! Make sure 'API_KEY' is set in Vercel Environment Variables.");
+} else {
+  console.log("✅ Gemini API Key loaded successfully.");
+}
+
 const ai = new GoogleGenAI({ apiKey });
 
 // Schema for parsing natural language to Time Entries
