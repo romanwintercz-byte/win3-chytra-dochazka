@@ -38,9 +38,9 @@ const HelpSystem: React.FC = () => {
   };
 
   const quickQuestions = [
-    "Jak zadat dovolenou?",
+    "Jak zadat více zakázek?",
+    "Jak funguje hlasové zadání?",
     "Jak exportovat PDF?",
-    "Jak zkopírovat záznam?",
     "Co když jsem zapomněl heslo?"
   ];
 
@@ -97,19 +97,23 @@ const HelpSystem: React.FC = () => {
             {/* GUIDE TAB */}
             {activeTab === 'guide' && (
               <div className="p-4 space-y-3">
-                <details className="group bg-white rounded-lg border border-gray-200 overflow-hidden">
+                <details open className="group bg-white rounded-lg border border-gray-200 overflow-hidden">
                   <summary className="flex justify-between items-center font-medium cursor-pointer list-none p-3 bg-gray-50 group-open:bg-indigo-50 text-gray-800">
-                    <span>🚀 Jak začít?</span>
+                    <span>🧩 Více zakázek v jeden den</span>
                     <span className="transition group-open:rotate-180">
                       <svg fill="none" height="24" shapeRendering="geometricPrecision" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
                     </span>
                   </summary>
                   <div className="text-gray-600 text-sm p-3 border-t border-gray-100">
-                    <p>Vítejte ve SmartWork! Váš hlavní úkol je evidovat denní práci.</p>
+                    <p>Potřebujete rozdělit 8 hodin mezi více projektů nebo přidat lékaře?</p>
                     <ul className="list-disc pl-4 mt-2 space-y-1">
-                      <li>Použijte <strong>AI Rychlé zadání</strong> pro napsání nebo nadiktování práce (např. "Včera 8h administrativa").</li>
-                      <li>Nebo použijte tlačítko <strong>"Zadat ručně"</strong> pro klasický formulář.</li>
+                      <li>Klikněte na den v tabulce. Otevře se <strong>Detail dne</strong>.</li>
+                      <li>Tlačítkem <strong>"Přidat další činnost"</strong> přidejte řádky.</li>
+                      <li>Skládejte činnosti jako kostičky, dokud dole nesvítí zelených 8h.</li>
                     </ul>
+                    <div className="mt-2 p-2 bg-indigo-50 rounded border border-indigo-100 text-indigo-800 font-medium">
+                       🎤 Tip: Řekněte AI boxu: "Včera 4h Web a 4h Eshop". Rozdělí to za vás!
+                    </div>
                   </div>
                 </details>
 
@@ -121,12 +125,13 @@ const HelpSystem: React.FC = () => {
                     </span>
                   </summary>
                   <div className="text-gray-600 text-sm p-3 border-t border-gray-100">
-                    <p>Potřebujete zadat celý týden najednou?</p>
+                    <p>Chcete zadat celý týden najednou?</p>
                     <ol className="list-decimal pl-4 mt-2 space-y-1">
                       <li>Klikněte na <strong>Zadat ručně</strong>.</li>
-                      <li>Zaškrtněte <strong>Více dní (Hromadně)</strong>.</li>
+                      <li>Zaškrtněte <strong>Více dní</strong>.</li>
                       <li>Vyberte datum Od a Do.</li>
-                      <li>Aplikace automaticky vytvoří záznamy a přeskočí víkendy.</li>
+                      <li>Vyplňte činnost (např. 8h Projekt X).</li>
+                      <li>Aplikace vytvoří záznamy pro všechny pracovní dny.</li>
                     </ol>
                   </div>
                 </details>
@@ -141,9 +146,9 @@ const HelpSystem: React.FC = () => {
                   <div className="text-gray-600 text-sm p-3 border-t border-gray-100">
                     <p>Na konci měsíce:</p>
                     <ul className="list-disc pl-4 mt-2 space-y-1">
-                      <li>Zkontrolujte, zda nemáte v kalendáři chyby (červená varování).</li>
-                      <li>Přejděte do záložky <strong>Reporty</strong> a stáhněte si PDF.</li>
-                      <li>Klikněte na <strong>Odeslat ke schválení</strong> v horní liště.</li>
+                      <li>Zkontrolujte varování (červená pole) v tabulce.</li>
+                      <li>Přejděte do záložky <strong>Reporty</strong>.</li>
+                      <li>Klikněte na <strong>Odeslat ke schválení</strong>.</li>
                     </ul>
                   </div>
                 </details>

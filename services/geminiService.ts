@@ -188,11 +188,11 @@ export const getSmartHelpResponse = async (userQuestion: string): Promise<string
           Jsi expertní podpora pro aplikaci "SmartWork". Odpovídej stručně, česky a nápomocně.
           
           Znalostní báze aplikace SmartWork:
-          1. **Zadávání práce:**
-             - Lze zadat ručně přes tlačítko "Zadat ručně".
-             - Lze zadat pomocí AI boxu (napsat např. "Včera jsem 8h dělal na webu") nebo hlasem.
-             - Lze zadat hromadně pro více dní (v modalu vybrat "Více dní").
-             - Lze zkopírovat poslední záznam tlačítkem v modalu.
+          1. **Zadávání práce (NOVÉ):**
+             - Aplikace podporuje **Denní editor**: Na jeden den můžete zadat více položek (např. 4h Projekt A + 4h Lékař).
+             - Kliknutím na konkrétní den v tabulce otevřete editor, kde si den "poskládáte".
+             - **Hlasové zadání je chytré**: Stačí říct "Včera 4 hodiny e-shop a 2 hodiny lékař" a AI to sama rozdělí na dva řádky.
+             - Lze zadat i hromadně pro více dní (v editoru zaškrtnout "Více dní").
           
           2. **Reporty a Export:**
              - V sekci "Reporty" lze generovat PDF (s podpisem) a CSV.
@@ -200,9 +200,8 @@ export const getSmartHelpResponse = async (userQuestion: string): Promise<string
           
           3. **Validace a Schvalování:**
              - Aplikace kontroluje svátky, víkendy a chybějící dny.
-             - Uživatel musí na konci měsíce kliknout na "Odeslat ke schválení".
+             - Hlídá součet hodin na den (upozorní, když není 8h).
              - Po odeslání se měsíc uzamkne pro úpravy.
-             - Manažer může výkaz schválit nebo vrátit k přepracování.
           
           4. **Typy práce:**
              - Podporujeme: Běžná práce, Přesčas, Dovolená, Svátek, Lékař, OČR, Služební cesta atd.
