@@ -18,29 +18,61 @@ import { analyzeTimesheet } from './services/geminiService';
 import { validateMonth } from './services/validationService';
 import { v4 as uuidv4 } from 'uuid';
 
-// Mock Initial Data
+// Real Data - Employees
 const initialEmployees: Employee[] = [
-  { id: '1', name: 'Jan Novák', role: 'Zaměstnanec', email: 'jan@smartwork.cz', avatar: 'https://ui-avatars.com/api/?name=Jan+Novak&background=random' },
-  { id: '2', name: 'Petr Manažer', role: 'Manager', email: 'petr@smartwork.cz', avatar: 'https://ui-avatars.com/api/?name=Petr+Manager&background=random' }
+  { id: '1', name: 'Jiří Bartoš', role: 'Zaměstnanec', email: 'jiri.bartos@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Jiri+Bartos&background=random' },
+  { id: '2', name: 'Bohumil Doseděl', role: 'Zaměstnanec', email: 'bohumil.dosedel@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Bohumil+Dosedel&background=random' },
+  { id: '3', name: 'Jan Klusal', role: 'Zaměstnanec', email: 'jan.klusal@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Jan+Klusal&background=random' },
+  { id: '4', name: 'Martina Páchová', role: 'Zaměstnanec', email: 'martina.pachova@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Martina+Pachova&background=random' },
+  { id: '5', name: 'Rudolf Seidel', role: 'Zaměstnanec', email: 'rudolf.seidel@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Rudolf+Seidel&background=random' },
+  { id: '6', name: 'Tomáš Záhořík', role: 'Zaměstnanec', email: 'tomas.zahorik@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Tomas+Zahorik&background=random' },
+  { id: '7', name: 'Marek Zámečník', role: 'Zaměstnanec', email: 'marek.zamecnik@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Marek+Zamecnik&background=random' },
+  { id: '8', name: 'Petr Choutka', role: 'Zaměstnanec', email: 'petr.choutka@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Petr+Choutka&background=random' },
+  { id: '9', name: 'Petr Šimon', role: 'Zaměstnanec', email: 'petr.simon@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Petr+Simon&background=random' },
+  { id: '10', name: 'Jaroslav Poborský', role: 'Zaměstnanec', email: 'jaroslav.poborsky@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Jaroslav+Poborsky&background=random' },
+  { id: '11', name: 'Jiří Konáš', role: 'Zaměstnanec', email: 'jiri.konas@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Jiri+Konas&background=random' },
+  { id: '12', name: 'Jan Vacenovský', role: 'Zaměstnanec', email: 'jan.vacenovsky@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Jan+Vacenovsky&background=random' },
+  { id: '13', name: 'Lucie Winterová', role: 'Manager', email: 'lucie.winterova@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Lucie+Winterova&background=random' },
+  { id: '14', name: 'Tomáš Vlček', role: 'Zaměstnanec', email: 'tomas.vlcek@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Tomas+Vlcek&background=random' },
+  { id: '15', name: 'Petr Marek', role: 'Zaměstnanec', email: 'petr.marek@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Petr+Marek&background=random' },
+  { id: '16', name: 'Vít Vávra', role: 'Zaměstnanec', email: 'vit.vavra@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Vit+Vavra&background=random' },
+  { id: '17', name: 'Jakub Doležal', role: 'Zaměstnanec', email: 'jakub.dolezal@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Jakub+Dolezal&background=random' },
+  { id: '18', name: 'Filip Cirhan', role: 'Zaměstnanec', email: 'filip.cirhan@kpusti.cz', avatar: 'https://ui-avatars.com/api/?name=Filip+Cirhan&background=random' },
 ];
 
+// Real Data - Jobs
 const initialJobs: Job[] = [
-  { id: 'j1', code: 'WEB-001', name: 'Website Redesign', isActive: true },
-  { id: 'j2', code: 'INT-202', name: 'Internal Tool', isActive: true },
-  { id: 'j3', code: 'MKT-101', name: 'Marketing Campaign', isActive: true },
+  { id: 'j1', code: '10000', name: 'Režie správní', isActive: true },
+  { id: 'j2', code: '10001', name: 'Režie výrobní', isActive: true },
+  { id: 'j3', code: '25001', name: 'Drobné zakázky roku 2025', isActive: true },
+  { id: 'j4', code: '25003', name: 'Drobné zakázky - Chládek & Tintěra', isActive: true },
+  { id: 'j5', code: '25004', name: 'Základy EŽ - Ohníč', isActive: true },
+  { id: 'j6', code: '25005', name: 'Horská služba - Bouřňák', isActive: true },
+  { id: 'j7', code: '25007', name: 'Hrádek nad Nisou', isActive: true },
+  { id: 'j8', code: '25013', name: 'Výstupní - trafostanice', isActive: true },
+  { id: 'j9', code: '25014', name: 'Kovářská - rekonstrukce autodílny SÚS', isActive: true },
+  { id: 'j10', code: '25016', name: 'Oprava haly na sůl Trmice', isActive: true },
+  { id: 'j11', code: '25017', name: 'Propustek Solany', isActive: true },
+  { id: 'j12', code: '25019', name: 'Trakční podpěry žst. Polepy', isActive: true },
+  { id: 'j13', code: '25020', name: 'Bohušovice - Lovosice EŽ - základy', isActive: true },
+  { id: 'j14', code: '25021', name: 'Přístavba budovy Roudnice nad Labem', isActive: true },
+  { id: 'j15', code: '25022', name: 'Podbořany/MONZAS', isActive: true },
+  { id: 'j16', code: '25023', name: 'Žst. Ústí nad Labem - západ', isActive: true },
+  { id: 'j17', code: '25028', name: 'Základy TV Běchovice, Kolovraty', isActive: true },
+  { id: 'j18', code: '25029', name: 'Hotelák', isActive: true },
+  { id: 'j19', code: '25030', name: 'Rekonstrukce stropu Velké Chvojno', isActive: true },
+  { id: 'j20', code: '25031', name: 'Propustek Němčany - Chotěbudice', isActive: true },
+  { id: 'j21', code: '25032', name: 'Svor - lesní koupaliště', isActive: true },
+  { id: 'j22', code: '25999', name: 'Poplatky za BZ 2025', isActive: true },
+  { id: 'j23', code: '99999', name: 'Ostatní', isActive: true },
 ];
 
 const getCurrentMonth = () => {
   return new Date().toISOString().slice(0, 7);
 };
 
-const initialData: TimeEntry[] = [
-  { id: uuidv4(), employeeId: '1', date: `${getCurrentMonth()}-01`, project: 'Website Redesign', description: 'Kickoff meeting', hours: 2, type: WorkType.REGULAR },
-  { id: uuidv4(), employeeId: '1', date: `${getCurrentMonth()}-01`, project: 'Website Redesign', description: 'Wireframing', hours: 6, type: WorkType.REGULAR },
-  { id: uuidv4(), employeeId: '1', date: `${getCurrentMonth()}-02`, project: 'Internal Tool', description: 'Bug fixing', hours: 8, type: WorkType.REGULAR },
-  { id: uuidv4(), employeeId: '1', date: `${getCurrentMonth()}-03`, project: 'Website Redesign', description: 'Deployment hotfix', hours: 2, type: WorkType.OVERTIME },
-  { id: uuidv4(), employeeId: '2', date: `${getCurrentMonth()}-03`, project: 'Marketing Campaign', description: 'Strategy planning', hours: 4, type: WorkType.REGULAR },
-];
+// Start with empty data
+const initialData: TimeEntry[] = [];
 
 const initialMonthStatus: MonthStatus = {
   month: getCurrentMonth(),
@@ -55,8 +87,8 @@ const App: React.FC = () => {
   const [jobs, setJobs] = useState<Job[]>(initialJobs);
   const [entries, setEntries] = useState<TimeEntry[]>(initialData);
   
-  // User Session State
-  const [currentUserId, setCurrentUserId] = useState<string>(initialEmployees[0].id);
+  // User Session State - Default to first user (Jiří Bartoš)
+  const [currentUserId, setCurrentUserId] = useState<string>('1');
   const currentUser = employees.find(e => e.id === currentUserId) || employees[0];
 
   // Month Selection State
@@ -69,7 +101,8 @@ const App: React.FC = () => {
   
   // Manual Entry Modal State
   const [isEntryModalOpen, setIsEntryModalOpen] = useState(false);
-  const [editingEntry, setEditingEntry] = useState<TimeEntry | null>(null);
+  // Instead of a single editing entry, we track the date being edited
+  const [editingDate, setEditingDate] = useState<string | null>(null);
 
   // About Modal State
   const [isAboutOpen, setIsAboutOpen] = useState(false);
@@ -80,8 +113,6 @@ const App: React.FC = () => {
 
   // Determine if the current view is locked for editing
   const isLocked = useMemo(() => {
-    // Locked if Submitted or Approved. Manager can always approve/reject, but not necessarily edit user data directly in this view without rejecting first.
-    // For simplicity: Locked means user cannot Add/Edit/Delete.
     return monthStatus.status === TimesheetStatus.SUBMITTED || monthStatus.status === TimesheetStatus.APPROVED;
   }, [monthStatus.status]);
 
@@ -95,11 +126,11 @@ const App: React.FC = () => {
     return allUserEntries.filter(e => e.date.startsWith(selectedMonth));
   }, [allUserEntries, selectedMonth]);
 
-  // 3. Get Last Entry for "Copy" functionality (Last added in the whole list)
-  const lastEntry = useMemo(() => {
-    if (allUserEntries.length === 0) return null;
-    return allUserEntries[allUserEntries.length - 1];
-  }, [allUserEntries]);
+  // 3. Entries for the currently editing date
+  const entriesForEditingDate = useMemo(() => {
+    if (!editingDate) return [];
+    return allUserEntries.filter(e => e.date === editingDate);
+  }, [allUserEntries, editingDate]);
 
   // 4. Validation Logic
   const validationIssues = useMemo(() => {
@@ -126,8 +157,6 @@ const App: React.FC = () => {
 
   // Sync Month Status when month changes (mock implementation)
   useEffect(() => {
-    // In a real app, fetch status for the selected month
-    // Reset to DRAFT if changed for demo purposes, unless we persist it
     setMonthStatus(prev => ({...prev, month: selectedMonth, status: prev.month === selectedMonth ? prev.status : TimesheetStatus.DRAFT }));
   }, [selectedMonth]);
 
@@ -158,26 +187,23 @@ const App: React.FC = () => {
     setEntries(prev => [...prev, ...newEntries]);
   };
 
-  const handleModalSubmit = (submittedEntries: TimeEntry[]) => {
+  // Replaced single entry update with Daily Bulk Update
+  const handleModalSubmit = (date: string, submittedEntries: TimeEntry[]) => {
     if (isLocked) {
       alert("Nelze upravovat záznamy v uzamčeném výkazu.");
       return;
     }
     
     setEntries(prev => {
-      let newEntriesList = [...prev];
-
-      submittedEntries.forEach(subEntry => {
-         const index = newEntriesList.findIndex(e => e.id === subEntry.id);
-         if (index !== -1) {
-           // Update existing
-           newEntriesList[index] = subEntry;
-         } else {
-           // Add new
-           newEntriesList.push(subEntry);
-         }
-      });
-      return newEntriesList;
+      if (date === 'BULK_RANGE') {
+        // Just append all new entries
+        return [...prev, ...submittedEntries];
+      } else {
+        // 1. Remove ALL existing entries for this user and this date
+        const otherEntries = prev.filter(e => !(e.employeeId === currentUserId && e.date === date));
+        // 2. Append the new set
+        return [...otherEntries, ...submittedEntries];
+      }
     });
   };
 
@@ -189,12 +215,12 @@ const App: React.FC = () => {
     setEntries(prev => prev.filter(e => e.id !== id));
   };
 
-  const handleEditEntry = (entry: TimeEntry) => {
+  const handleEditDay = (date: string) => {
     if (isLocked) {
       alert("Nelze upravovat záznamy v uzamčeném výkazu.");
       return;
     }
-    setEditingEntry(entry);
+    setEditingDate(date);
     setIsEntryModalOpen(true);
   };
 
@@ -203,7 +229,7 @@ const App: React.FC = () => {
       alert("Nelze přidávat záznamy do uzamčeného výkazu.");
       return;
     }
-    setEditingEntry(null); // Clear editing state for new entry
+    setEditingDate(new Date().toISOString().split('T')[0]); // Default to today
     setIsEntryModalOpen(true);
   };
 
@@ -393,7 +419,7 @@ const App: React.FC = () => {
               <TimesheetTable 
                 entries={monthlyUserEntries} 
                 onDelete={handleDeleteEntry} 
-                onEdit={handleEditEntry}
+                onEdit={handleEditDay}
                 isLocked={isLocked}
               />
             </>
@@ -473,10 +499,10 @@ const App: React.FC = () => {
         isOpen={isEntryModalOpen}
         onClose={() => setIsEntryModalOpen(false)}
         onSubmit={handleModalSubmit}
-        initialData={editingEntry}
+        initialDate={editingDate || undefined}
+        existingEntries={entriesForEditingDate}
         currentUserId={currentUserId}
         jobs={jobs}
-        lastEntry={lastEntry}
       />
     </div>
   );
