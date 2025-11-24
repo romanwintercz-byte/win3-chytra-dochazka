@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { parseNaturalLanguageEntry, transcribeAudio } from '../services/geminiService';
-import { TimeEntry, Job } from '../types';
+import { TimeEntry, Job, WorkType } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 
 interface SmartInputProps {
@@ -19,6 +19,10 @@ const SmartInput: React.FC<SmartInputProps> = ({ onEntriesAdded, currentUserId, 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
+  const isProjectRequired = (type: WorkType) => {
+    return type === WorkType.REGULAR || type === WorkType.OVERTIME;
+  };
+
   const handleSmartSubmit = async () => {
     if (!inputText.trim()) return;
 
@@ -29,15 +33,23 @@ const SmartInput: React.FC<SmartInputProps> = ({ onEntriesAdded, currentUserId, 
       const today = new Date().toISOString().split('T')[0];
       const parsedItems = await parseNaturalLanguageEntry(inputText, today, availableJobs);
 
-      const newEntries: TimeEntry[] = parsedItems.map(item => ({
-        id: uuidv4(),
-        employeeId: currentUserId,
-        date: item.date || today,
-        project: item.project || 'General',
-        description: item.description || 'Práce',
-        hours: item.hours || 0,
-        type: item.type || Object.values(item.type || {})[0] // Fallback safety
-      } as TimeEntry));
+      const newEntries: TimeEntry[] = parsedItems.map(item => {
+        // Fallback type safety
+        const workType = item.type || WorkType.REGULAR;
+        
+        // Force clear project if type is not Regular or Overtime
+        const safeProject = isProjectRequired(workType) ? (item.project || 'General') : '';
+
+        return {
+            id: uuidv4(),
+            employeeId: currentUserId,
+            date: item.date || today,
+            project: safeProject,
+            description: item.description || 'Práce',
+            hours: item.hours || 0,
+            type: workType
+        } as TimeEntry;
+      });
 
       onEntriesAdded(newEntries);
       setInputText('');
