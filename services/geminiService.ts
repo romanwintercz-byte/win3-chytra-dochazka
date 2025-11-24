@@ -19,7 +19,7 @@ const timeEntrySchema: Schema = {
     type: Type.OBJECT,
     properties: {
       date: { type: Type.STRING, description: "Date in YYYY-MM-DD format. If relative date (today, yesterday) is used, calculate based on reference date." },
-      project: { type: Type.STRING, description: "Exact name of the project/job from the provided list." },
+      project: { type: Type.STRING, description: "Exact name of the project/job from the provided list. LEAVE EMPTY/NULL if type is NOT Regular Work or Overtime." },
       description: { type: Type.STRING, description: "Short description of the task." },
       hours: { type: Type.NUMBER, description: "Number of hours worked." },
       type: { 
@@ -38,10 +38,9 @@ const timeEntrySchema: Schema = {
           WorkType.OTHER_OBSTACLE,
           WorkType.SIXTY_PERCENT
         ],
-        description: "Type of work entry. Use 'Lékař' for doctor visits, 'OČR' for nursing family, 'Služební cesta' for business trips, '60%' for specific partial payment."
+        description: "Type of work entry."
       }
     },
-    // Description removed from required to make it optional
     required: ["date", "hours", "type"]
   }
 };
@@ -56,7 +55,10 @@ export const parseNaturalLanguageEntry = async (text: string, referenceDate: str
       Pokud uživatel neuvede typ práce, předpokládej 'Běžná práce'.
       
       Dostupné Zakázky (Projects): [${jobList}]
-      - Snaž se namapovat vstup uživatele na jednu z těchto zakázek. Pokud se neshoduje, použij nejpodobnější nebo 'Obecné'.
+      
+      PRAVIDLA PRO PŘIŘAZENÍ ZAKÁZKY:
+      1. Pokud je typ práce 'Běžná práce' nebo 'Přesčas', MUSÍŠ přiřadit zakázku ze seznamu (nebo 'Ostatní', pokud nenajdeš shodu).
+      2. Pokud je typ práce cokoliv jiného (Dovolená, Lékař, Svátek, OČR atd.), pole 'project' MUSÍ zůstat prázdné nebo null. K absencím se zakázky nepřiřazují.
       
       Vstupní text: "${text}"
     `;
@@ -193,6 +195,7 @@ export const getSmartHelpResponse = async (userQuestion: string): Promise<string
              - Kliknutím na konkrétní den v tabulce otevřete editor, kde si den "poskládáte".
              - **Hlasové zadání je chytré**: Stačí říct "Včera 4 hodiny e-shop a 2 hodiny lékař" a AI to sama rozdělí na dva řádky.
              - Lze zadat i hromadně pro více dní (v editoru zaškrtnout "Více dní").
+             - **DŮLEŽITÉ:** Zakázky se zadávají POUZE u "Běžné práce" a "Přesčasů". U dovolené, lékaře atd. se zakázka nevyplňuje.
           
           2. **Reporty a Export:**
              - V sekci "Reporty" lze generovat PDF (s podpisem) a CSV.
