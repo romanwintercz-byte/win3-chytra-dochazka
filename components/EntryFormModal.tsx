@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { TimeEntry, Job, WorkType } from '../types';
 import { v4 as uuidv4 } from 'uuid';
@@ -39,7 +38,7 @@ const EntryFormModal: React.FC<EntryFormModalProps> = ({
           if (existingEntries && existingEntries.length > 0) {
             setRows(existingEntries.map(e => ({
                 id: e.id,
-                project: e.project,
+                project: e.project || '',
                 description: e.description,
                 hours: e.hours.toString(),
                 type: e.type
@@ -61,6 +60,10 @@ const EntryFormModal: React.FC<EntryFormModalProps> = ({
     return rows.reduce((acc, row) => acc + (parseFloat(row.hours) || 0), 0);
   }, [rows]);
 
+  const isProjectRequired = (type: WorkType) => {
+    return type === WorkType.REGULAR || type === WorkType.OVERTIME;
+  };
+
   const addRow = () => {
     setRows(prev => [...prev, {
         id: uuidv4(),
@@ -78,7 +81,17 @@ const EntryFormModal: React.FC<EntryFormModalProps> = ({
   const updateRow = (id: string, field: keyof RowState, value: string) => {
     setRows(prev => prev.map(r => {
         if (r.id === id) {
-            return { ...r, [field]: value };
+            const updatedRow = { ...r, [field]: value };
+            
+            // Logic: If type changes to something that doesn't need a project, clear project
+            if (field === 'type') {
+                if (!isProjectRequired(value as WorkType)) {
+                    updatedRow.project = ''; // Clear project
+                } else if (updatedRow.project === '' && jobs.length > 0) {
+                    updatedRow.project = jobs[0].name; // Restore default if switching back to work
+                }
+            }
+            return updatedRow;
         }
         return r;
     }));
@@ -102,7 +115,7 @@ const EntryFormModal: React.FC<EntryFormModalProps> = ({
                             id: uuidv4(),
                             employeeId: currentUserId,
                             date: isoDate,
-                            project: row.project,
+                            project: isProjectRequired(row.type) ? row.project : '', // Ensure project is empty for non-work
                             description: row.description,
                             hours: parseFloat(row.hours),
                             type: row.type
@@ -118,7 +131,7 @@ const EntryFormModal: React.FC<EntryFormModalProps> = ({
             id: uuidv4(),
             employeeId: currentUserId,
             date: date,
-            project: r.project,
+            project: isProjectRequired(r.type) ? r.project : '', // Ensure project is empty for non-work
             description: r.description,
             hours: parseFloat(r.hours) || 0,
             type: r.type
@@ -209,21 +222,28 @@ const EntryFormModal: React.FC<EntryFormModalProps> = ({
 
           {/* Rows Area */}
           <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-gray-100">
-             {rows.map((row, index) => (
+             {rows.map((row, index) => {
+                const projectEnabled = isProjectRequired(row.type);
+                return (
                 <div key={row.id} className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col md:flex-row gap-4 items-start md:items-center animate-fade-in hover:shadow-md transition-shadow">
                     <div className="flex-1 w-full md:w-auto">
                         <label className="block md:hidden text-xs font-bold text-gray-700 mb-1">Projekt</label>
                         <select
-                            required
+                            required={projectEnabled}
+                            disabled={!projectEnabled}
                             value={row.project}
                             onChange={(e) => updateRow(row.id, 'project', e.target.value)}
-                            className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm font-semibold text-gray-900 bg-white"
+                            className={`w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm font-semibold transition-colors ${
+                                projectEnabled 
+                                ? 'border-gray-300 text-gray-900 bg-white' 
+                                : 'border-gray-200 text-gray-400 bg-gray-50 cursor-not-allowed'
+                            }`}
                         >
-                            <option value="" disabled>Vyberte projekt...</option>
-                            {jobs.map(job => (
+                            <option value="" disabled={projectEnabled}>{projectEnabled ? 'Vyberte projekt...' : '--- Bez zakázky ---'}</option>
+                            {projectEnabled && jobs.map(job => (
                                 <option key={job.id} value={job.name}>{job.name} ({job.code})</option>
                             ))}
-                            <option value="General">Obecné / Režie</option>
+                            {projectEnabled && <option value="General">Obecné / Režie</option>}
                         </select>
                     </div>
 
@@ -276,7 +296,7 @@ const EntryFormModal: React.FC<EntryFormModalProps> = ({
                         </button>
                     </div>
                 </div>
-             ))}
+             )})}
 
              <button 
                 type="button" 
